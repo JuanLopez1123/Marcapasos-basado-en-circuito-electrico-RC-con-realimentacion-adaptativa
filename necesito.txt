@@ -1,6 +1,0 @@
-streamlit
-plotly
-numpy
-pandas
-matplotlib
-Pillow  # para GIF
