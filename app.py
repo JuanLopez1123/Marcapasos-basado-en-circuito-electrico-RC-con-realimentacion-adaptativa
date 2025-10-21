@@ -283,95 +283,95 @@ tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
     "🧮 Modelo Matemático"
 ])
 
-# Enhanced Graphical Analysis Tab
 with tab1:
-    st.markdown("## 📈 Visualización Profesional del Pulso")
+    st.markdown("## 📈 Visualización Continua del Voltaje del Marcapasos ")
     
-    # Create professional visualization
     fig = go.Figure()
-    
-    # Professional color palette for medical applications
+
     medical_colors = [
         '#E74C3C', '#3498DB', '#2ECC71', '#F39C12', '#9B59B6',
         '#1ABC9C', '#E67E22', '#34495E', '#16A085', '#C0392B'
     ]
-    
-    # Plot each beat with enhanced styling
+
     for i, (start, end) in enumerate(beat_boundaries):
         color = medical_colors[i % len(medical_colors)]
-        
-        # Convert hex color to rgba with transparency
+
+        # Convertir a RGBA para sombra
         hex_color = color.lstrip('#')
         r = int(hex_color[0:2], 16)
         g = int(hex_color[2:4], 16)
         b = int(hex_color[4:6], 16)
-        fillcolor = f'rgba({r}, {g}, {b}, 0.1)'
-        
-        # Add gradient effect with fill
+        fillcolor = f'rgba({r}, {g}, {b}, 0.15)'
+
+        if i > 0:
+            t_segment = np.concatenate(([t[start-1]], t[start:end]))
+            V_segment = np.concatenate(([V[start-1]], V[start:end]))
+        else:
+            t_segment = t[start:end]
+            V_segment = V[start:end]
+
         fig.add_trace(go.Scatter(
-            x=t[start:end],
-            y=V[start:end],
+            x=t_segment,
+            y=V_segment,
             mode='lines',
             line=dict(width=3, color=color),
-            name=f'Latido {i+1} (R={R_vals[start]:.0f}Ω)',
-            fill='tonexty' if i > 0 else 'tozeroy',
+            fill='tonexty',  
             fillcolor=fillcolor,
-            hovertemplate=f'<b>Latido {i+1}</b><br>Tiempo: %{{x:.3f}}s<br>Voltaje: %{{y:.2f}}V<br>Resistencia: {R_vals[start]:.0f}Ω<extra></extra>'
+            name=f'Latido {i+1}',
+            hovertemplate=f"<b>Latido {i+1}</b><br>Tiempo: %{{x:.3f}}s<br>Voltaje: %{{y:.2f}}V<extra></extra>"
         ))
-    
-    # Add threshold line if feedback is enabled
-    if use_feedback:
-        fig.add_hline(
-            y=V_min, 
-            line_dash="dot", 
-            line_color="#E74C3C", 
-            line_width=2,
-            annotation_text=f"Umbral Mínimo ({V_min}V)",
-            annotation_position="top left"
-        )
-    
-    # Professional layout styling
+
+    # Línea del umbral
+    fig.add_hline(
+        y=V_min,
+        line_dash="dot",
+        line_color="#F1C40F",
+        line_width=2,
+        annotation_text=f"Umbral: {V_min:.1f}V",
+        annotation_position="top right"
+    )
+
+    # Configuración visual
     fig.update_layout(
         title={
-            'text': "Simulación de Descarga del Marcapasos - Modelo RC Profesional",
+            'text': "Simulación Continua del Voltaje del Marcapasos con Latidos Diferenciados",
             'x': 0.5,
             'xanchor': 'center',
             'font': {'size': 18, 'color': '#2C3E50'}
         },
-        xaxis_title="Tiempo (segundos)",
-        yaxis_title="Voltaje (voltios)",
-        height=600,
-        template=plot_template,
+        xaxis_title="Tiempo (s)",
+        yaxis_title="Voltaje (V)",
+        height=550,
+        template="plotly_dark",
         showlegend=True,
         legend=dict(
-            orientation="v",
-            yanchor="top",
-            y=0.99,
-            xanchor="left",
-            x=1.02,
-            bgcolor="rgba(255,255,255,0.9)",
-            bordercolor="rgba(0,0,0,0.1)",
-            borderwidth=1
-        ),
+    orientation="v",
+    yanchor="top",
+    y=0.99,
+    xanchor="left",
+    x=1.02,
+    bgcolor="rgba(0,0,0,0.6)",   # ✅ fondo oscuro semitransparente
+    bordercolor="rgba(255,255,255,0.2)",  # ✅ borde suave y claro
+    borderwidth=1,
+    font=dict(color="white")  # ✅ texto visible en modo oscuro
+)
+,
         hovermode='x unified',
         margin=dict(r=150)
     )
-    
-    # Enhanced grid and styling
+
     fig.update_xaxes(
         gridcolor='rgba(128,128,128,0.2)',
-        gridwidth=1,
-        zeroline=True,
-        zerolinecolor='rgba(128,128,128,0.3)'
+        gridwidth=1
     )
     fig.update_yaxes(
         gridcolor='rgba(128,128,128,0.2)',
-        gridwidth=1,
-        zeroline=True,
-        zerolinecolor='rgba(128,128,128,0.3)'
+        gridwidth=1
     )
-    
+
     st.plotly_chart(fig, use_container_width=True)
+
+
     
     # Export options
     export_col1, export_col2 = st.columns([3, 1])
