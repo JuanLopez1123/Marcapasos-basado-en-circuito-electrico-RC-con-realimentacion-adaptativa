@@ -350,10 +350,10 @@ with tab1:
     y=0.99,
     xanchor="left",
     x=1.02,
-    bgcolor="rgba(0,0,0,0.6)",   # ✅ fondo oscuro semitransparente
-    bordercolor="rgba(255,255,255,0.2)",  # ✅ borde suave y claro
+    bgcolor="rgba(0,0,0,0.6)",   
+    bordercolor="rgba(255,255,255,0.2)",  
     borderwidth=1,
-    font=dict(color="white")  # ✅ texto visible en modo oscuro
+    font=dict(color="white")  
 )
 ,
         hovermode='x unified',
