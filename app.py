@@ -64,28 +64,6 @@ st.markdown("""
 with st.sidebar:
     st.markdown("## ⚙️ Panel de Control")
     
-    st.markdown("### Tema de Interfaz")
-    theme_mode = st.radio(
-        "Seleccionar Tema",
-        options=["Claro", "Oscuro"],
-        index=0,
-        horizontal=True,
-        help="Cambiar entre modo claro y oscuro"
-    )
-    
-    if theme_mode == "Oscuro":
-        st.markdown("""
-        <style>
-            .main {
-                background-color: #1E1E1E;
-                color: #E0E0E0;
-            }
-            .stMarkdown {
-                color: #E0E0E0;
-            }
-        </style>
-        """, unsafe_allow_html=True)
-    
     st.divider()
     
     st.markdown("### 🏥 Configuraciones Clínicas Predefinidas")
@@ -271,7 +249,7 @@ t, V, R_vals, V0_vals, beat_boundaries = simulate_multiple_beats(
 )
 
 # Set plot template based on theme
-plot_template = "plotly_dark" if theme_mode == "Oscuro" else "plotly_white"
+plot_template = "plotly_dark" if  "Oscuro" else "plotly_white"
 
 # Main content tabs with professional styling
 tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
@@ -350,10 +328,10 @@ with tab1:
     y=0.99,
     xanchor="left",
     x=1.02,
-    bgcolor="rgba(0,0,0,0.6)",   
-    bordercolor="rgba(255,255,255,0.2)",  
+    bgcolor="rgba(0,0,0,0.6)",   # ✅ fondo oscuro semitransparente
+    bordercolor="rgba(255,255,255,0.2)",  # ✅ borde suave y claro
     borderwidth=1,
-    font=dict(color="white")  
+    font=dict(color="white")  # ✅ texto visible en modo oscuro
 )
 ,
         hovermode='x unified',
